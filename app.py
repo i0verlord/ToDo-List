@@ -24,8 +24,8 @@ def edit_task(task_id):
         return render_template("edit_task.html", task=todo_list.tasks[index], index=index)
 
 @app.route("/remove_task/<int:index>")
-def remove_task(index):
-    todo_list.remove_task(index)
+def remove_task(task_id):
+    todo_list.remove_task(task_id)
     return redirect(url_for("index"))
 
 if __name__ == '__main__':

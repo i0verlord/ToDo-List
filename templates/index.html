@@ -9,15 +9,28 @@
     <link rel="stylesheet" href="static\style.css">
 </head>
 <body>
-    <h1>To-Do list</h1>
+    <h1>To-Do List</h1>
+
+    <form action="{{ url_for('add_task') }}" method="POST">
+        <input type="text" name="task_name" placeholder="Task name">
+        <button type="submit">Add</button>
+    </form>
+
+    {% if tasks %}
     <ul>
         {% for task in tasks %}
-        <li>{{ task }}</li>
+        <li>
+            {{ task.name }}
+            <form action="{{ url_for('edit_task', task_id=task.id) }}" method="POST">
+                <input type="text" name="new_task_name" placeholder="New task name">
+                <button type="submit">Edit</button>
+            </form>
+            <form action="{{ url_for('remove_task', task_id=task.id) }}" method="POST">
+                <button type="submit">Remove</button>
+            </form>
+        </li>
         {% endfor %}
     </ul>
-    <rom method="POST" action="/add_task">
-        <input type="text" name="task" required>
-        <button type="submit">Add Task</button>
-    </rom>
+    {% else %}
 </body>
 </html>
