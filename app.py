@@ -1,32 +1,29 @@
 from flask import Flask, render_template, request, redirect, url_for
-from todo_list import ToDOList
+from todo_list import ToDoList
 
 app = Flask(__name__)
-todo_list = ToDOList()
+todo_list = ToDoList()
 
 @app.route('/')
 def index():
-    return render_template("index.html", task=todo_list.tasks)
+    return render_template('index.html', tasks=todo_list.tasks)
 
 @app.route('/add', methods=['POST'])
-def add():
-    task = request.form['task']
-    todo_list.add_task(task)
+def add_task():
+    task_name = request.form['task_name']
+    todo_list.add_task(task_name)
     return redirect(url_for('index'))
 
-@app.route('/edit_task/<int:task_id>', methods=['GET','POST'])
+@app.route('/edit/<int:task_id>', methods=['POST'])
 def edit_task(task_id):
-    if request.method == 'POST':
-        task = request.form['task']
-        todo_list.edit_task(task_id, task)
-        return redirect(url_for('index'))
-    else:
-        return render_template("edit_task.html", task=todo_list.tasks[index], index=index)
+    new_task_name = request.form['new_task_name']
+    todo_list.edit_task(task_id, new_task_name)
+    return redirect(url_for('index'))
 
-@app.route("/remove_task/<int:index>")
+@app.route('/remove/<int:task_id>', methods=['POST'])
 def remove_task(task_id):
     todo_list.remove_task(task_id)
-    return redirect(url_for("index"))
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)
